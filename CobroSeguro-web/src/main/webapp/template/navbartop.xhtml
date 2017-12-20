@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:ui="http://java.sun.com/jsf/facelets"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:b="http://bootsfaces.net/ui"
+             xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+             xmlns:p="http://primefaces.org/ui">
+
+    <ui:remove>
+        <!--
+                    Hint to editors: The menus follow the Chicago style of capitalization. Please capitalize everything but the "smaller" words. 
+        -->
+    </ui:remove>
+    <b:navBar  inverse="true" fixed="top">
+        <b:navbarLinks >
+            <b:navLink href="#{request.contextPath}/indexPaises.xhtml" ><p:graphicImage library="images" name="logo.png"  width="105" height="44" /></b:navLink>
+            <b:navLink value="#{bundle['titleEmpleos']}" href="#{request.contextPath}/mostrarOfertas.xhtml?opcion=0" style="#{login.setearColor(0)};margin-top: 15px;"  rendered="#{!(login.pais.length() eq 0)}"></b:navLink>
+            <b:navLink value="#{bundle['titleCandidato']}" href="#{request.contextPath}/indexCandidato.xhtml?opcion=1" style="margin-top: 15px;#{login.setearColor(1)}" rendered="#{(!login.loggedIn) and (login.pais.length() gt 0)}"></b:navLink>
+            <b:navLink value="#{bundle['titleEmpresa']}" href="#{request.contextPath}/indexEmpresa.xhtml?opcion=2" style="margin-top: 15px;#{login.setearColor(2)}" rendered="#{(!login.loggedIn) and (login.pais.length() gt 0)}"></b:navLink>
+            <b:navLink value="#{bundle['lblContactenos']}" href="#{request.contextPath}/contactenos.xhtml?opcion=3" style="margin-top: 15px;#{login.setearColor(3)}" ></b:navLink>
+        </b:navbarLinks>
+        <b:navbarLinks style="margin-top: 15px;"  rendered="#{login.loggedIn}">
+            <ui:repeat var="modulo" value="#{login.listaModulos}" varStatus="status" >
+                <b:navLink  value="#{modulo.nombremenu}" href="#{request.contextPath.concat('/pages/').concat(modulo.opcion)}"
+                           rendered="#{login.obtenerListaOpciones(status.index).size() eq 0}"></b:navLink> 
+                <b:dropMenu value="#{modulo.nombremenu}" rendered="#{(login.obtenerListaOpciones(status.index).size() > 0) and (login.pais.length() gt 0)}" style="#{login.setearColor(status.index+4)}">
+                    <ui:repeat var="menu" value="#{login.listaOpciones}" varStatus="status1">
+                        <b:navLink value="#{menu.nombremenu}" href="#{request.contextPath.concat('/pages/').concat(menu.opcion).concat('?opcion=').concat(status.index+4)}"></b:navLink>
+                    </ui:repeat>
+                </b:dropMenu>
+            </ui:repeat>
+         
+        </b:navbarLinks>
+        
+        <h:form styleClass="navbar-form navbar-right">
+            <b:navbarLinks  style="margin-top: 10px;"  rendered="#{login.loggedIn}">
+                <b:dropMenu value="#{login.userLog.nombre.concat('    ').concat(login.pais)}">
+                    <b:column col-md="12" style="text-align: center;" >
+                        <h:panelGrid columns="1">
+                            <h:graphicImage  library="images" name="usuario.png" height="100" width="100" rendered="#{login.userLog.imagen eq null}" />
+                            <h:graphicImage  value="#{login.userLog.imagen}" height="100" width="100" rendered="#{login.userLog.imagen.length() > 5}" />
+                            <h:outputText value="#{login.userLog.nombre}" style="color:green;"></h:outputText>
+                            <h:panelGrid  columns="2" rendered="#{login.obtenerMembresiaActual()}" >
+                                <h:outputText  style="font-weight: bold" value="Membresia:" />
+                                <h:outputText style="color: #{login.colorMem(login.membresiaActual.titulomembresia)}; margin-left: 50px;"  value="#{login.membresiaActual.titulomembresia}"/>
+                                <h:outputText style="font-weight: bold" value="Inicio:" />
+                                <h:outputText style="color: green; margin-left: 35px;" value="#{login.obtenerFecha(login.membresiaxEmpresaActual.fechainicio)}"/>
+                                <h:outputText style="font-weight: bold" value="Expiracion:" />
+                                <h:outputText style="color: red; margin-left: 35px;" value="#{login.obtenerFecha(login.membresiaxEmpresaActual.fechavencimiento)}"/>
+                            </h:panelGrid>
+                            <b:commandButton size="sm" type="submit" icon-rotate="l" iconAwesome="thumbs-up"
+                                             value="#{bundle['lblBtnCerrarSession']}" action="#{login.doLogout}"
+                                             look="danger" title="#{bundle['lblBtnCerrarSession']}" />
+                        </h:panelGrid>
+                    </b:column>
+                </b:dropMenu>
+            </b:navbarLinks>
+            <c:if test="#{!login.loggedIn and login.mostrarLogin()}">
+                <div style="margin-top:2px" >
+                     <div class="form-group" >
+                         
+                    <b:inputText placeholder="Email" fieldSize="sm" value="#{login.usuario}"/>
+                   
+                    <!--input type="text" class="form-control" placeholder="Search"/-->
+                </div>
+                <div class="form-group">
+                    <b:inputSecret placeholder="Password" fieldSize="sm" value="#{login.password}"/>
+                </div> 
+                     
+                #{' '}
+                <b:commandButton action="#{login.logear}" value="#{bundle['lblBtnAcceder']}" look="success" icon="chevron-right" iconAlign="right" style=" font-size: 12px"></b:commandButton>
+                <div class="form-group" style="margin-top: 15px">
+                    <p style="color: white; font-size: 12px">#{login.pais}
+                  <br/>
+                  <p:commandLink actionListener="#{recuperar.modal()}" value="#{bundle['lblLink']}" style="color: #00CED1; font-size: 11px"></p:commandLink>
+                  <br/>
+                 
+                    </p>
+                    <!--input type="text" class="form-control" placeholder="Search"/-->
+                </div>
+                   
+                    
+                </div>
+            </c:if>
+        </h:form>
+    </b:navBar>
+    
+    
+    <h:form id="recuperarForm">
+             
+             <b:modal title="#{bundle['lbltituloCuenta']}"  id="recuperarC"  styleClass="recuperarCuenta" size="380">
+                
+          
+                 <b:panelGrid columns="1" id="btnCorreo" >
+                     <b:messages />
+                     <h:outputText rendered="#{!recuperar.mostrar}" value="#{bundle['lblMensaje']}" ></h:outputText>
+                      <br/>
+                  <h:outputText rendered="#{!recuperar.mostrar}" value="#{bundle['lblcorreo']}" ></h:outputText>
+                  <b:inputText rendered="#{!recuperar.mostrar}" value="#{recuperar.usuario}" ></b:inputText>
+                  <h:outputText rendered="#{recuperar.mostrar}" value="#{bundle['lblcodigo']}" ></h:outputText>
+                  <b:inputText rendered="#{recuperar.mostrar}" value="#{recuperar.codigo}"></b:inputText>
+                  </b:panelGrid>
+                 <f:facet name="footer" >
+                     <b:panelGrid id="btnFooter" columns="1" >
+                      <b:commandButton   rendered="#{recuperar.mostrar}" type="submit"  look="info" action="#{recuperar.verificador()}" value="#{bundle['lblBCodigo']}">
+                         </b:commandButton>
+                          <b:commandButton rendered="#{!recuperar.mostrar}"  look="info" action="#{recuperar.cuenta()}" value="#{bundle['lblBCorreo']}" >
+                      <f:ajax execute="@form" render="@none" />
+                      </b:commandButton>
+                        </b:panelGrid>    
+                  </f:facet>
+                        
+             
+        </b:modal>
+            </h:form>
+
+</ui:fragment>

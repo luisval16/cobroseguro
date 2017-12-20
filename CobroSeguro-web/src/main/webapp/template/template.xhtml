@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+         <!-- <h:outputScript >
+             history.forward();
+           </h:outputScript> -->
+        <title>BootsFaces: the next-gen JSF Framework based on Bootstrap</title>
+        <meta name="author" content="Riccardo Massera" />
+        <meta name="description" content="BootsFaces, a powerful JSF framework that takes the best from Bootstrap and jQuery UI to let develop well-designed state-of-the-art next-gen Front-end Enterprise Applications fast and easy supporting HTML5." />
+        <meta name="KEYWORDS" content="jsf, bootstrap, framework, java, enterprise, server, faces, jquery, usability, next-gen, web, html5, easy, modern, well-designed, website, state-of-the-art" />
+        <meta name="robots" content="index, follow" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="revisit-after" content="7 days" />
+        <meta name="DISTRIBUTION" content="GLOBAL" />
+        <meta http-equiv="PRAGMA" content="NO-CACHE" />
+        <meta name="copyright" content="TheCoder4.eu ( Riccardo Massera ), Stephan Rauh et al." />
+        <style>
+            .ui-growl{
+                top:85px;
+                color: white;
+            }
+            
+                body{
+               // background-color: #D5F2EC;
+               background-color: #EEFAF7;
+                    /*
+                    background-image: url("#{resource['images:fondo.png']}");
+                    background-repeat: no-repeat;
+                    background-size: 100% 100%;
+                    */
+                }
+        </style>
+        <!--
+        <style>.tooltip-inner {
+                max-width: 350px;
+                /* If max-width does not work, try using width instead */
+                width: 350px; 
+                #scrollUpCustom {
+                    background-image: url("#{resource['images:top.png']}");
+                    bottom: 65px;
+                    right: 18px;
+                    width: 38px; /* width of the custom image */
+                    height: 38px; /* height of the custom image */
+                    outline: none;
+                }
+            }</style>
+        -->
+    </h:head>
+    <h:body style="padding-top: 85px;padding-bottom: 85px;" addLabels="false" addMessages="false">
+        <h:form id="formGrl">
+        <p:growl widgetVar="growl" id="growl"  showDetail="true"></p:growl>
+        </h:form>
+        <!-- Ventana modal para logear si quiere aplicar a oferta sin estar autenticado -->
+        <h:form id="loginForm" >
+            <b:modal title="#{bundle['titleLogin']}"  id="res"  styleClass="sesion"  >
+               <!-- <center>
+                    <p:graphicImage library="images" name="plantilla.png" style="width: 100%" /></center> -->
+            <b:panelGrid columns="1" id="Correo" style="
+                         background-image: url('#{resource['images/plantilla2 chambita nube amarilla.jpg']}');
+                         padding-top: 20px;
+                         padding-left: 120px;
+                         padding-bottom: 7px;
+                         background-repeat: no-repeat;
+                         " >
+                     <h:outputText value="#{bundle['lblAutLogin']}" style=" font-size: 100%;font-weight: bold;margin-left: 5px"></h:outputText><br></br> <br></br>
+                  <b:inputText placeholder="Email" fieldSize="sm" value="#{login.usuario}"/>
+                  
+                  <b:inputSecret placeholder="Password" fieldSize="sm" value="#{login.password}"/>
+                  
+                   <p:commandLink actionListener="#{recuperar.modal()}" value="#{bundle['lblLink']}" style="color: #00CED1; font-size: 11px"></p:commandLink>
+                   <p:commandLink actionListener="#{login.redireccionar('/registroCandidato.xhtml')}" value="#{bundle['lblLink2']}" style="color: #00CED1; font-size: 11px"></p:commandLink>
+                   
+                  </b:panelGrid>
+                 <f:facet name="footer" >
+                     <b:panelGrid id="btnFooter" columns="1" >
+                        
+                         <b:commandButton action="#{login.logear()}" value="#{bundle['lblBtnAcceder']}" look="success" icon="chevron-right" iconAlign="right" style=" font-size: 12px">
+                         
+                      </b:commandButton>
+                        </b:panelGrid>    
+                  </f:facet>
+                        
+             
+        </b:modal>
+                    
+        </h:form>
+        <b:scrollUp distance="200" animation="fade" text=""  name="scrollUpCustom" />
+        <!--
+        <h:outputScript library="sh" name="js/shCore.js"         target="head"/>
+        -->        
+        <ui:insert name="nbtop">
+            <ui:include src="/template/navbartop.xhtml"/>
+        </ui:insert>
+
+        <b:container>
+            <ui:insert name="content"/>
+        </b:container>
+
+        <ui:insert name="nbtop">
+            <ui:include src="/template/navbarbottom.xhtml"/>
+        </ui:insert>
+        
+       
+
+    </h:body>
+</html>
